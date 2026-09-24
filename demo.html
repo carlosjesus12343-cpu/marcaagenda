@@ -16,6 +16,8 @@
     .option.selected,.time.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
     .option.selected .meta,.option.selected .price{color:#f4ede6}
     .summary-box{background:#f3eee8;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px;line-height:1.8}
+    .schedule-groups{display:grid;gap:24px}.schedule-group h3{font-size:1rem;letter-spacing:.02em;margin:0 0 12px;color:var(--muted)}
+    .schedule-group{padding-top:6px}
     @media(max-width:820px){.demo-hero{grid-template-columns:1fr}.mini-phone{max-width:390px;margin:auto}}
   </style>
 </head>
@@ -71,7 +73,16 @@
           <h2>Escolha o horário</h2>
           <p>Horários de exemplo para a experiência de demonstração.</p>
         </div>
-        <div class="time-grid" id="times"></div>
+        <div class="schedule-groups">
+          <div class="schedule-group">
+            <h3>Manhã</h3>
+            <div class="time-grid" id="timesMorning"></div>
+          </div>
+          <div class="schedule-group">
+            <h3>Tarde</h3>
+            <div class="time-grid" id="timesAfternoon"></div>
+          </div>
+        </div>
 
         <div class="panel-head" style="margin-top:34px">
           <h2>Dados do cliente</h2>
@@ -108,12 +119,14 @@
       { id:'p3', name:'Profissional 3', bio:'Exemplo de atendimento premium.' }
     ];
 
-    const times = ['09:00','10:00','11:30','13:30','15:00','16:30','18:00'];
+    const morningTimes = ['08:00','09:00','10:00','11:00'];
+    const afternoonTimes = ['13:00','14:00','15:00','16:00','17:00','18:00'];
 
     const state = { service:null, professional:null, time:null };
     const servicesEl = document.getElementById('services');
     const prosEl = document.getElementById('professionals');
-    const timesEl = document.getElementById('times');
+    const timesMorningEl = document.getElementById('timesMorning');
+    const timesAfternoonEl = document.getElementById('timesAfternoon');
     const resultEl = document.getElementById('result');
 
     document.getElementById('date').value = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
@@ -150,14 +163,19 @@
       });
     }
 
-    function renderTimes(){
-      timesEl.innerHTML = times.map(t => `<button type="button" class="time ${state.time===t?'selected':''}" data-time="${t}">${t}</button>`).join('');
-      timesEl.querySelectorAll('.time').forEach(btn => {
+    function bindTimeButtons(container){
+      container.querySelectorAll('.time').forEach(btn => {
         btn.onclick = () => {
           state.time = btn.dataset.time;
           renderTimes();
         };
       });
+    }
+    function renderTimes(){
+      timesMorningEl.innerHTML = morningTimes.map(t => `<button type="button" class="time ${state.time===t?'selected':''}" data-time="${t}">${t}</button>`).join('');
+      timesAfternoonEl.innerHTML = afternoonTimes.map(t => `<button type="button" class="time ${state.time===t?'selected':''}" data-time="${t}">${t}</button>`).join('');
+      bindTimeButtons(timesMorningEl);
+      bindTimeButtons(timesAfternoonEl);
     }
 
     renderServices();

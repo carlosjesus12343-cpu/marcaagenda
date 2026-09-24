@@ -86,7 +86,7 @@ $('#buyerForm').addEventListener('submit',async e=>{
     $('#qrcode').innerHTML='';
     new QRCode($('#qrcode'),{text:payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
     $('#pixArea').scrollIntoView({behavior:'smooth'});
-  }catch(err){showError('Não foi possível gerar a cobrança. Tente novamente.');}
+  }catch(err){showError('Não foi possível gerar a cobrança Pix. Atualize a página e tente novamente. Se continuar, fale com o suporte.');}
 });
 $('#copyPix').onclick=async()=>{await navigator.clipboard.writeText($('#pixCode').value);$('#copyPix').textContent='Copiado!';setTimeout(()=>$('#copyPix').textContent='Copiar código',1500)};
 load();

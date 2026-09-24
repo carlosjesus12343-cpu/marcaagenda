@@ -73,3 +73,10 @@ Observação: a cobrança ainda precisa de um meio de pagamento externo. Após a
 
 ## V6
 Chave Pix aleatória configurada no fluxo de pagamento. O QR Code e o Pix Copia e Cola agora usam a chave configurada em `pagamento.js`.
+
+## V7
+- Horários da demonstração separados em Manhã e Tarde.
+- Horários disponíveis até 18:00.
+- Corrigida a função `create_pix_order` no Supabase.
+- Teste técnico confirmou criação de cobrança para o plano Essencial por R$ 39,99.
+- Área profissional renomeada para Painel do Negócio, deixando claro que não é login do cliente final.
