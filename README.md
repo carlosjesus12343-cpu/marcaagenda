@@ -80,3 +80,18 @@ Chave Pix aleatória configurada no fluxo de pagamento. O QR Code e o Pix Copia 
 - Corrigida a função `create_pix_order` no Supabase.
 - Teste técnico confirmou criação de cobrança para o plano Essencial por R$ 39,99.
 - Área profissional renomeada para Painel do Negócio, deixando claro que não é login do cliente final.
+
+## V8 — fluxo completo de venda e acesso
+- `gestao.html`: painel exclusivo do dono do MarcaAgenda para acompanhar compras e confirmar Pix manualmente.
+- `ativar.html`: comprador cria sua conta e ativa o negócio depois do pagamento confirmado.
+- `agendar.html`: página pública real de cada negócio usando `?b=slug`.
+- Ao ativar uma compra, o banco cria automaticamente:
+  - empresa;
+  - vínculo do proprietário;
+  - licença do plano comprado;
+  - Profissional 1;
+  - serviço Atendimento;
+  - horário inicial de segunda a sexta, 08:00–18:00.
+- Painel do negócio mostra o link público para enviar aos clientes.
+- Cliente final não precisa ter conta.
+- O Pix continua com confirmação manual até existir integração com gateway/webhook.

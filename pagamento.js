@@ -72,16 +72,21 @@ $('#buyerForm').addEventListener('submit',async e=>{
     return;
   }
   try{
-    const rows=await rpc('create_pix_order',{
+    const rows=await rpc('create_pix_order_v2',{
       p_plan_id:currentPlan.id,
       p_buyer_name:$('#buyerName').value.trim(),
-      p_buyer_phone:$('#buyerPhone').value.trim()
+      p_buyer_phone:$('#buyerPhone').value.trim(),
+      p_buyer_email:$('#buyerEmail').value.trim()
     });
     const order=rows[0];
     const txid=order.external_reference.slice(0,25);
     const payload=makePixPayload(PIX_KEY,MERCHANT_NAME,MERCHANT_CITY,order.amount_cents/100,txid);
     $('#pixCode').value=payload;
     $('#orderRef').textContent=`Referência da cobrança: ${order.external_reference}`;
+    const activation=`./ativar.html?order=${encodeURIComponent(order.order_id)}&ref=${encodeURIComponent(order.external_reference)}`;
+    $('#activationLink').href=activation;
+    $('#activationLink').classList.remove('hidden');
+    localStorage.setItem('ma_last_order',JSON.stringify({order_id:order.order_id,external_reference:order.external_reference,plan_id:order.plan_id}));
     $('#pixArea').classList.remove('hidden');
     $('#qrcode').innerHTML='';
     new QRCode($('#qrcode'),{text:payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});

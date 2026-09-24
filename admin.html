@@ -15,7 +15,16 @@
   <div id="entitlements" class="entitlements"></div>
 </div>
 
-<div class="admin-grid"><div class="metric"><span class="muted">Hoje</span><strong id="todayCount">0</strong></div><div class="metric"><span class="muted">Próximos</span><strong id="futureCount">0</strong></div><div class="metric"><span class="muted">Clientes</span><strong id="clientCount">0</strong></div></div>
+<div class="admin-card" style="margin-bottom:16px">
+      <h2>Seu link de agendamento</h2>
+      <p class="muted">Envie este link aos seus clientes. Eles não precisam criar conta.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input id="publicBookingLink" readonly style="flex:1;min-width:220px">
+        <button id="copyBookingLink" class="secondary" type="button">Copiar link</button>
+        <a id="openBookingLink" class="primary" target="_blank" rel="noopener" style="text-decoration:none">Abrir página</a>
+      </div>
+    </div>
+    <div class="admin-grid"><div class="metric"><span class="muted">Hoje</span><strong id="todayCount">0</strong></div><div class="metric"><span class="muted">Próximos</span><strong id="futureCount">0</strong></div><div class="metric"><span class="muted">Clientes</span><strong id="clientCount">0</strong></div></div>
 <div class="admin-card" style="margin-top:16px"><h2>Próximos agendamentos</h2><div class="table-wrap"><table><thead><tr><th>Horário</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="appointments"></tbody></table></div></div>
 </section>
 </main><script src="./admin.js" defer></script></body></html>

@@ -22,9 +22,12 @@ function renderEntitlements(plan, license){
 }
 async function loadDashboard(){
   try{
-    const memberships=await req('rest/v1/memberships?select=business_id,role,businesses(name)&limit=1');
+    const memberships=await req('rest/v1/memberships?select=business_id,role,businesses(name,slug)&limit=1');
     if(!memberships?.length)throw new Error('Usuário sem acesso a estabelecimento.');
     const m=memberships[0], bid=m.business_id; $('#dashBusiness').textContent=m.businesses?.name||'Minha agenda';
+    const pub=new URL('./agendar.html',location.href); pub.searchParams.set('b',m.businesses?.slug||'');
+    $('#publicBookingLink').value=pub.href; $('#openBookingLink').href=pub.href;
+    $('#copyBookingLink').onclick=async()=>{await navigator.clipboard.writeText(pub.href);$('#copyBookingLink').textContent='Copiado!';setTimeout(()=>$('#copyBookingLink').textContent='Copiar link',1200)};
     const [licenses, plans] = await Promise.all([
       req(`rest/v1/business_licenses?business_id=eq.${bid}&select=*`),
       req('rest/v1/plans?active=eq.true&select=*')

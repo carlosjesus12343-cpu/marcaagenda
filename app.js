@@ -7,7 +7,7 @@ const state = { business:null, services:[], professionals:[], links:[], hours:[]
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const money = cents => cents == null ? 'Consultar' : new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(cents/100);
-const slug = new URLSearchParams(location.search).get('b') || location.pathname.split('/').filter(Boolean).pop()?.replace('.html','') || 'studio-aurora';
+const slug = new URLSearchParams(location.search).get('b') || 'studio-aurora';
 const api = async (path, options={}) => {
   const r = await fetch(`${SB_URL}/rest/v1/${path}`, {...options, headers:{...headers,...(options.headers||{})}});
   if(!r.ok) throw new Error((await r.text()) || 'Erro de comunicação.');
@@ -85,7 +85,14 @@ async function renderTimes(){
         cur+=30;
       }
     }
-    box.innerHTML=slots.length?slots.map(x=>`<button class="time" data-time="${x.iso}">${x.hm}</button>`).join(''):'<span class="muted">Nenhum horário livre nesta data.</span>';
+    if(!slots.length){
+      box.innerHTML='<span class="muted">Nenhum horário livre nesta data.</span>';
+    } else {
+      const morning=slots.filter(x=>Number(x.hm.slice(0,2))<12);
+      const afternoon=slots.filter(x=>Number(x.hm.slice(0,2))>=12);
+      const group=(title,list)=>list.length?`<div class="slot-group"><h3>${title}</h3><div class="time-grid">${list.map(x=>`<button class="time" data-time="${x.iso}">${x.hm}</button>`).join('')}</div></div>`:'';
+      box.innerHTML=group('Manhã',morning)+group('Tarde',afternoon);
+    }
     $$('[data-time]').forEach(b=>b.onclick=()=>{state.time=b.dataset.time;$$('[data-time]').forEach(x=>x.classList.toggle('selected',x===b));setTimeout(()=>show(4),180);});
   }catch(e){box.innerHTML='<span class="muted">Não foi possível consultar os horários.</span>';}
 }

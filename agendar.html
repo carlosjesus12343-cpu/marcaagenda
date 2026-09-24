@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#F7F4EF">
+  <meta name="description" content="Agendamento online simples, seguro e profissional.">
+  <title>MarcaAgenda</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./index.html">MarcaAgenda</a>
+    <a class="quiet-link" href="./admin.html">Painel do negócio</a>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">AGENDAMENTO ONLINE</p>
+        <h1 id="businessName">Carregando...</h1>
+        <p id="businessDescription" class="muted">Escolha o serviço, profissional e horário.</p>
+      </div>
+      <div class="status-pill">Reserva em poucos passos</div>
+    </section>
+
+    <section class="booking-card" aria-label="Agendamento">
+      <div class="steps" id="steps">
+        <button class="step active" data-step="1"><span>1</span> Serviço</button>
+        <button class="step" data-step="2"><span>2</span> Profissional</button>
+        <button class="step" data-step="3"><span>3</span> Horário</button>
+        <button class="step" data-step="4"><span>4</span> Dados</button>
+      </div>
+
+      <div id="alert" class="alert hidden" role="status"></div>
+
+      <section class="panel" data-panel="1">
+        <div class="panel-head">
+          <h2>Qual serviço você deseja?</h2>
+          <p>Escolha uma opção para continuar.</p>
+        </div>
+        <div id="services" class="option-grid skeleton-grid"></div>
+      </section>
+
+      <section class="panel hidden" data-panel="2">
+        <div class="panel-head">
+          <button class="back" data-back="1">← Voltar</button>
+          <h2>Escolha o profissional</h2>
+          <p>Mostramos apenas quem realiza o serviço escolhido.</p>
+        </div>
+        <div id="professionals" class="option-grid"></div>
+      </section>
+
+      <section class="panel hidden" data-panel="3">
+        <div class="panel-head">
+          <button class="back" data-back="2">← Voltar</button>
+          <h2>Escolha a data e o horário</h2>
+          <p>Horários ocupados são removidos automaticamente.</p>
+        </div>
+        <label class="field compact">
+          <span>Data</span>
+          <input id="dateInput" type="date">
+        </label>
+        <div id="times" class="time-grid"></div>
+      </section>
+
+      <section class="panel hidden" data-panel="4">
+        <div class="panel-head">
+          <button class="back" data-back="3">← Voltar</button>
+          <h2>Seus dados</h2>
+          <p>Usaremos apenas para administrar o agendamento.</p>
+        </div>
+        <form id="bookingForm" class="form-grid">
+          <label class="field"><span>Nome *</span><input id="clientName" autocomplete="name" maxlength="100" required></label>
+          <label class="field"><span>WhatsApp / telefone *</span><input id="clientPhone" inputmode="tel" autocomplete="tel" maxlength="30" required></label>
+          <label class="field"><span>E-mail</span><input id="clientEmail" type="email" autocomplete="email" maxlength="254"></label>
+          <label class="field"><span>Observação</span><textarea id="clientNote" maxlength="500" rows="3" placeholder="Opcional"></textarea></label>
+          <label class="consent"><input id="marketingOptIn" type="checkbox"><span>Quero receber novidades e ofertas deste estabelecimento.</span></label>
+          <p class="privacy-note">Ao confirmar, seus dados serão usados para criar e administrar este agendamento. Consulte a <a href="./privacidade.html">Política de Privacidade</a>.</p>
+          <button id="confirmButton" class="primary" type="submit">Confirmar agendamento</button>
+        </form>
+      </section>
+
+      <section class="panel hidden success" data-panel="5">
+        <div class="success-icon">✓</div>
+        <p class="eyebrow">AGENDAMENTO CONFIRMADO</p>
+        <h2>Está tudo certo.</h2>
+        <div id="confirmation" class="confirmation"></div>
+        <button class="secondary" onclick="location.reload()">Fazer outro agendamento</button>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> MarcaAgenda</span>
+    <nav><a href="./privacidade.html">Privacidade</a><a href="./termos.html">Termos</a></nav>
+  </footer>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

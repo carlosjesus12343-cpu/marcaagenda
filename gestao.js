@@ -1,0 +1,20 @@
+const SB_URL='https://xdbnwojiwrjsoxmzuosu.supabase.co',SB_KEY='sb_publishable_MS66GND3YbXJ-31KUwdDmA_DDviTf4F';let token=localStorage.getItem('ma_master_token');const $=s=>document.querySelector(s);
+const hdr=()=>({apikey:SB_KEY,Authorization:`Bearer ${token||SB_KEY}`,'Content-Type':'application/json'});
+async function rpc(fn,body={}){const r=await fetch(`${SB_URL}/rest/v1/rpc/${fn}`,{method:'POST',headers:hdr(),body:JSON.stringify(body)});const t=await r.text();if(!r.ok)throw new Error(t||'Erro');return t?JSON.parse(t):null}
+async function auth(path,body){const r=await fetch(`${SB_URL}/auth/v1/${path}`,{method:'POST',headers:{apikey:SB_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d?.msg||d?.error_description||'Erro de autenticação');if(d.access_token){token=d.access_token;localStorage.setItem('ma_master_token',token)}return d}
+const brl=c=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(c/100);
+function msg(el,text){$(el).textContent=text;$(el).classList.remove('hidden')}
+async function enter(){
+  if(!token)return;
+  try{
+    const ok=await rpc('is_current_user_platform_admin');
+    if(ok===true){$('#loginCard').classList.add('hidden');$('#bootstrapCard').classList.add('hidden');$('#dashboard').classList.remove('hidden');loadOrders()}
+    else {$('#loginCard').classList.add('hidden');$('#bootstrapCard').classList.remove('hidden')}
+  }catch(e){$('#loginCard').classList.add('hidden');$('#bootstrapCard').classList.remove('hidden')}
+}
+$('#loginForm').onsubmit=async e=>{e.preventDefault();try{await auth('token?grant_type=password',{email:$('#email').value.trim(),password:$('#password').value});enter()}catch(e){msg('#loginErr',e.message)}};
+$('#showSignup').onclick=()=>$('#signupForm').classList.toggle('hidden');
+$('#signupForm').onsubmit=async e=>{e.preventDefault();try{const d=await auth('signup',{email:$('#signupEmail').value.trim(),password:$('#signupPassword').value});if(d.access_token)enter();else msg('#loginErr','Conta criada. Confirme seu e-mail e depois faça login.')}catch(e){msg('#loginErr',e.message)}};
+$('#bootstrapForm').onsubmit=async e=>{e.preventDefault();try{await rpc('bootstrap_platform_admin',{p_code:$('#bootstrapCode').value.trim()});$('#bootstrapCard').classList.add('hidden');$('#dashboard').classList.remove('hidden');loadOrders()}catch(e){msg('#bootErr','Código inválido ou administrador já configurado.')}};
+async function loadOrders(){const rows=await rpc('list_payment_orders_admin');$('#orders').innerHTML=rows.length?rows.map(o=>`<article class="order ${o.status==='paid'?'paid':'pending'}"><div><strong>${o.buyer_name||'Sem nome'} — ${o.plan_name}</strong><div class="tiny">${o.buyer_email||''} · ${o.buyer_phone||''}<br>Ref: ${o.external_reference}</div></div><div><strong>${brl(o.amount_cents)}</strong><div class="tiny">Status: ${o.status}${o.claimed_at?' · ativado':''}</div></div><div>${o.status==='pending'?`<button class="primary" data-pay="${o.order_id}">Confirmar pagamento</button>`:`<button class="secondary" data-copy="${o.order_id}" data-ref="${o.external_reference}">Copiar link de ativação</button>`}</div></article>`).join(''):'<div class="card">Nenhuma compra ainda.</div>';document.querySelectorAll('[data-pay]').forEach(b=>b.onclick=async()=>{if(!confirm('Você conferiu o Pix recebido e deseja liberar esta compra?'))return;await rpc('mark_payment_paid',{p_order_id:b.dataset.pay});loadOrders()});document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const u=new URL('./ativar.html',location.href);u.searchParams.set('order',b.dataset.copy);u.searchParams.set('ref',b.dataset.ref);await navigator.clipboard.writeText(u.href);b.textContent='Link copiado!';setTimeout(()=>b.textContent='Copiar link de ativação',1300)})}
+$('#logout').onclick=()=>{localStorage.removeItem('ma_master_token');location.reload()};enter();

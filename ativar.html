@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MarcaAgenda — Ativar acesso</title><link rel="stylesheet" href="./styles.css">
+<style>
+.wrap{width:min(760px,calc(100% - 32px));margin:0 auto;padding:64px 0}.card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px}.status{padding:14px 16px;border-radius:14px;background:#f3eee8;margin:18px 0}.ok{background:#e7f2ea;color:#315c46}.warn{background:#fff1df;color:#78531f}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:620px){.two{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header class="topbar"><a class="brand" href="./">MarcaAgenda</a><a class="quiet-link" href="./">Página de vendas</a></header>
+<main class="wrap"><section class="card">
+<p class="eyebrow">ATIVAÇÃO DO CLIENTE</p><h1>Crie seu acesso</h1>
+<p class="muted">Depois do pagamento ser confirmado, você cria sua conta e o MarcaAgenda prepara seu negócio automaticamente.</p>
+<div id="orderStatus" class="status">Consultando pagamento...</div>
+
+<div id="accountArea" class="hidden">
+  <h2>1. Crie sua conta</h2>
+  <form id="signupForm" class="form-grid" style="grid-template-columns:1fr">
+    <label class="field"><span>E-mail</span><input id="email" type="email" required></label>
+    <label class="field"><span>Senha</span><input id="password" type="password" minlength="8" required></label>
+    <button class="primary">Criar conta</button>
+  </form>
+  <p class="notice muted">Se sua conta já existe, use o formulário abaixo para entrar.</p>
+  <form id="loginForm" class="form-grid" style="grid-template-columns:1fr;margin-top:12px">
+    <label class="field"><span>E-mail</span><input id="loginEmail" type="email" required></label>
+    <label class="field"><span>Senha</span><input id="loginPassword" type="password" required></label>
+    <button class="secondary">Entrar</button>
+  </form>
+</div>
+
+<div id="businessArea" class="hidden" style="margin-top:30px">
+  <h2>2. Configure seu negócio</h2>
+  <form id="claimForm" class="form-grid" style="grid-template-columns:1fr">
+    <label class="field"><span>Nome do negócio</span><input id="businessName" required maxlength="100" placeholder="Ex.: Barbearia Central"></label>
+    <label class="field"><span>Endereço do seu link</span><input id="businessSlug" required maxlength="50" placeholder="barbearia-central"></label>
+    <button class="primary">Ativar meu MarcaAgenda</button>
+  </form>
+</div>
+<div id="done" class="hidden status ok"></div><div id="err" class="alert hidden"></div>
+</section></main>
+<script src="./ativar.js" defer></script></body></html>

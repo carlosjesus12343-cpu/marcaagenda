@@ -29,7 +29,7 @@
 
     <form id="buyerForm" class="form-grid" style="grid-template-columns:1fr;margin-top:24px">
       <label class="field"><span>Seu nome</span><input id="buyerName" required maxlength="100"></label>
-      <label class="field"><span>Seu WhatsApp</span><input id="buyerPhone" required maxlength="30" placeholder="(55) 99999-9999"></label>
+      <label class="field"><span>Seu WhatsApp</span><input id="buyerPhone" required maxlength="30" placeholder="(55) 99999-9999"></label><label class="field"><span>Seu e-mail</span><input id="buyerEmail" type="email" required maxlength="254" placeholder="voce@email.com"></label>
       <button class="primary" type="submit">Gerar cobrança Pix</button>
     </form>
 
@@ -41,7 +41,7 @@
         <input id="pixCode" readonly>
         <button id="copyPix" type="button" class="secondary">Copiar código</button>
       </div>
-      <p id="orderRef" class="notice"></p>
+      <p id="orderRef" class="notice"></p><a id="activationLink" class="primary hidden" style="display:inline-flex;text-decoration:none;margin-top:10px" href="#">Já paguei — acompanhar ativação</a>
       <p class="notice"><strong>Importante:</strong> para gerar um Pix real, configure sua chave Pix, nome do recebedor e cidade no arquivo <code>pagamento.js</code>. A confirmação automática do pagamento exige integração com um provedor/API.</p>
     </div>
     <div id="errorBox" class="alert hidden"></div>
