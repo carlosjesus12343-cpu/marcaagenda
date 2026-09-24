@@ -42,3 +42,17 @@ A página inicial agora é uma vitrine comercial do MarcaAgenda. O fluxo de agen
 - Página inicial com exemplos genéricos (barbearia, clínica, estética, etc.).
 - Planos alterados para pagamento vitalício.
 - `demo.html` virou uma demonstração estática de experiência do cliente com Profissional 1, 2 e 3 e CTA para WhatsApp.
+
+## V4 — Planos vitalícios reais
+O Supabase agora possui:
+- `plans`: Essencial, Profissional e Premium.
+- `business_licenses`: licença por empresa, com pagamento único e `lifetime_access`.
+- bloqueio de quantidade de profissionais no próprio banco.
+- Essencial: 1 profissional.
+- Profissional: até 5.
+- Premium: profissionais ilimitados.
+- recursos por plano: identidade personalizada, domínio próprio, painel avançado e suporte prioritário.
+- painel profissional mostra plano e status da licença.
+- licença demo do `studio-aurora` está ativa como Premium vitalício.
+
+Observação: a cobrança ainda precisa de um meio de pagamento externo. Após a confirmação, a licença pode ser ativada no banco; o modelo já está pronto para registrar provedor, ID do pagamento, valor pago e data.
