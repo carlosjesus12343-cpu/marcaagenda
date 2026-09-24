@@ -32,3 +32,7 @@ Também aceita `?b=slug-do-estabelecimento`.
 
 ## Publicação
 Pode ser hospedado como site estático com HTTPS e domínio próprio. Para produção comercial, configurar um domínio novo e revisar textos jurídicos com profissional habilitado conforme o modelo de negócio e os dados efetivamente tratados.
+
+
+## V2
+A página inicial agora é uma vitrine comercial do MarcaAgenda. O fluxo de agendamento de demonstração está em `demo.html`.
