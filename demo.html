@@ -4,9 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#F7F4EF">
-  <meta name="description" content="Agendamento online simples, seguro e profissional.">
-  <title>MarcaAgenda</title>
+  <title>MarcaAgenda — Demonstração</title>
   <link rel="stylesheet" href="./styles.css">
+  <style>
+    .demo-shell{width:min(980px,calc(100% - 32px));margin:0 auto;padding:72px 0 56px}
+    .demo-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;margin-bottom:30px}
+    .demo-hero h1{font-size:clamp(2.2rem,7vw,4.4rem);line-height:.94;letter-spacing:-.06em;margin:0 0 16px}
+    .demo-hero p{color:var(--muted);line-height:1.7}
+    .mini-phone{background:#1f1d1b;border-radius:28px;padding:10px;box-shadow:0 25px 70px rgba(0,0,0,.14)}
+    .mini-screen{background:#fffdf9;border-radius:20px;padding:20px}
+    .option.selected,.time.selected{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .option.selected .meta,.option.selected .price{color:#f4ede6}
+    .summary-box{background:#f3eee8;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:16px;line-height:1.8}
+    @media(max-width:820px){.demo-hero{grid-template-columns:1fr}.mini-phone{max-width:390px;margin:auto}}
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -14,88 +25,173 @@
     <a class="quiet-link" href="./admin.html">Área profissional</a>
   </header>
 
-  <main class="shell">
-    <section class="hero">
+  <main class="demo-shell">
+    <section class="demo-hero">
       <div>
-        <p class="eyebrow">AGENDAMENTO ONLINE</p>
-        <h1 id="businessName">Carregando...</h1>
-        <p id="businessDescription" class="muted">Escolha o serviço, profissional e horário.</p>
+        <p class="eyebrow">DEMONSTRAÇÃO DE EXPERIÊNCIA</p>
+        <h1>Veja como o cliente agenda na prática.</h1>
+        <p>Nesta demonstração o visitante escolhe um serviço, seleciona o <strong>Profissional 1, 2 ou 3</strong>, define horário e segue para o WhatsApp com a reserva pronta.</p>
       </div>
-      <div class="status-pill">Reserva em poucos passos</div>
+      <div class="mini-phone">
+        <div class="mini-screen">
+          <strong style="display:block;margin-bottom:16px">Sua Marca</strong>
+          <p class="eyebrow">AGENDAMENTO ONLINE</p>
+          <h2 style="font-size:1.8rem;letter-spacing:-.05em;margin:0 0 6px">Escolha seu horário</h2>
+          <p class="muted">Fluxo simples para o cliente final.</p>
+          <div class="option" style="margin-top:12px"><strong>Serviço principal</strong><div class="meta">45 min</div></div>
+          <div class="option"><strong>Serviço premium</strong><div class="meta">60 min</div></div>
+          <div class="time-grid" style="margin-top:14px"><button class="time">09:00</button><button class="time">10:30</button><button class="time">13:00</button><button class="time">15:00</button><button class="time">16:30</button><button class="time">18:00</button></div>
+        </div>
+      </div>
     </section>
 
-    <section class="booking-card" aria-label="Agendamento">
-      <div class="steps" id="steps">
-        <button class="step active" data-step="1"><span>1</span> Serviço</button>
-        <button class="step" data-step="2"><span>2</span> Profissional</button>
-        <button class="step" data-step="3"><span>3</span> Horário</button>
-        <button class="step" data-step="4"><span>4</span> Dados</button>
+    <section class="booking-card">
+      <div class="steps">
+        <button class="step active"><span>1</span> Serviço</button>
+        <button class="step"><span>2</span> Profissional</button>
+        <button class="step"><span>3</span> Horário</button>
+        <button class="step"><span>4</span> Dados</button>
       </div>
 
-      <div id="alert" class="alert hidden" role="status"></div>
-
-      <section class="panel" data-panel="1">
+      <section class="panel">
         <div class="panel-head">
-          <h2>Qual serviço você deseja?</h2>
-          <p>Escolha uma opção para continuar.</p>
+          <h2>Monte sua demonstração de agendamento</h2>
+          <p>Essa parte simula a experiência do cliente final.</p>
         </div>
-        <div id="services" class="option-grid skeleton-grid"></div>
-      </section>
 
-      <section class="panel hidden" data-panel="2">
-        <div class="panel-head">
-          <button class="back" data-back="1">← Voltar</button>
+        <div class="option-grid" id="services"></div>
+
+        <div class="panel-head" style="margin-top:34px">
           <h2>Escolha o profissional</h2>
-          <p>Mostramos apenas quem realiza o serviço escolhido.</p>
+          <p>Exemplo com múltiplos profissionais disponíveis.</p>
         </div>
-        <div id="professionals" class="option-grid"></div>
-      </section>
+        <div class="option-grid" id="professionals"></div>
 
-      <section class="panel hidden" data-panel="3">
-        <div class="panel-head">
-          <button class="back" data-back="2">← Voltar</button>
-          <h2>Escolha a data e o horário</h2>
-          <p>Horários ocupados são removidos automaticamente.</p>
+        <div class="panel-head" style="margin-top:34px">
+          <h2>Escolha o horário</h2>
+          <p>Horários de exemplo para a experiência de demonstração.</p>
         </div>
-        <label class="field compact">
-          <span>Data</span>
-          <input id="dateInput" type="date">
-        </label>
-        <div id="times" class="time-grid"></div>
-      </section>
+        <div class="time-grid" id="times"></div>
 
-      <section class="panel hidden" data-panel="4">
-        <div class="panel-head">
-          <button class="back" data-back="3">← Voltar</button>
-          <h2>Seus dados</h2>
-          <p>Usaremos apenas para administrar o agendamento.</p>
+        <div class="panel-head" style="margin-top:34px">
+          <h2>Dados do cliente</h2>
+          <p>Finalize como se fosse um cliente agendando pelo celular.</p>
         </div>
-        <form id="bookingForm" class="form-grid">
-          <label class="field"><span>Nome *</span><input id="clientName" autocomplete="name" maxlength="100" required></label>
-          <label class="field"><span>WhatsApp / telefone *</span><input id="clientPhone" inputmode="tel" autocomplete="tel" maxlength="30" required></label>
-          <label class="field"><span>E-mail</span><input id="clientEmail" type="email" autocomplete="email" maxlength="254"></label>
-          <label class="field"><span>Observação</span><textarea id="clientNote" maxlength="500" rows="3" placeholder="Opcional"></textarea></label>
-          <label class="consent"><input id="marketingOptIn" type="checkbox"><span>Quero receber novidades e ofertas deste estabelecimento.</span></label>
-          <p class="privacy-note">Ao confirmar, seus dados serão usados para criar e administrar este agendamento. Consulte a <a href="./privacidade.html">Política de Privacidade</a>.</p>
-          <button id="confirmButton" class="primary" type="submit">Confirmar agendamento</button>
+        <form id="demoForm" class="form-grid">
+          <label class="field"><span>Nome *</span><input id="name" required maxlength="100" placeholder="Seu nome"></label>
+          <label class="field"><span>WhatsApp *</span><input id="phone" required maxlength="30" placeholder="(55) 99999-9999"></label>
+          <label class="field"><span>Data *</span><input id="date" type="date" required></label>
+          <label class="field"><span>Observação</span><textarea id="note" maxlength="300" rows="3" placeholder="Opcional"></textarea></label>
+          <button class="primary" type="submit">Simular confirmação</button>
         </form>
-      </section>
 
-      <section class="panel hidden success" data-panel="5">
-        <div class="success-icon">✓</div>
-        <p class="eyebrow">AGENDAMENTO CONFIRMADO</p>
-        <h2>Está tudo certo.</h2>
-        <div id="confirmation" class="confirmation"></div>
-        <button class="secondary" onclick="location.reload()">Fazer outro agendamento</button>
+        <div id="result" class="summary-box hidden"></div>
       </section>
     </section>
   </main>
 
   <footer>
-    <span>© <span id="year"></span> MarcaAgenda</span>
+    <span>© 2026 MarcaAgenda</span>
     <nav><a href="./privacidade.html">Privacidade</a><a href="./termos.html">Termos</a></nav>
   </footer>
 
-  <script src="./app.js" defer></script>
+  <script>
+    const services = [
+      { id:'s1', name:'Serviço Essencial', time:'45 min', price:'R$ 40,00' },
+      { id:'s2', name:'Serviço Profissional', time:'60 min', price:'R$ 65,00' },
+      { id:'s3', name:'Serviço Premium', time:'75 min', price:'R$ 90,00' }
+    ];
+
+    const professionals = [
+      { id:'p1', name:'Profissional 1', bio:'Exemplo de atendimento padrão.' },
+      { id:'p2', name:'Profissional 2', bio:'Exemplo de atendimento profissional.' },
+      { id:'p3', name:'Profissional 3', bio:'Exemplo de atendimento premium.' }
+    ];
+
+    const times = ['09:00','10:00','11:30','13:30','15:00','16:30','18:00'];
+
+    const state = { service:null, professional:null, time:null };
+    const servicesEl = document.getElementById('services');
+    const prosEl = document.getElementById('professionals');
+    const timesEl = document.getElementById('times');
+    const resultEl = document.getElementById('result');
+
+    document.getElementById('date').value = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+    document.getElementById('date').min = document.getElementById('date').value;
+
+    function renderServices(){
+      servicesEl.innerHTML = services.map(s => `
+        <button type="button" class="option ${state.service?.id===s.id?'selected':''}" data-id="${s.id}">
+          <strong>${s.name}</strong>
+          <div class="meta">${s.time}</div>
+          <div class="price">${s.price}</div>
+        </button>
+      `).join('');
+      servicesEl.querySelectorAll('.option').forEach(btn => {
+        btn.onclick = () => {
+          state.service = services.find(s => s.id === btn.dataset.id);
+          renderServices();
+        };
+      });
+    }
+
+    function renderProfessionals(){
+      prosEl.innerHTML = professionals.map(p => `
+        <button type="button" class="option ${state.professional?.id===p.id?'selected':''}" data-id="${p.id}">
+          <strong>${p.name}</strong>
+          <div class="meta">${p.bio}</div>
+        </button>
+      `).join('');
+      prosEl.querySelectorAll('.option').forEach(btn => {
+        btn.onclick = () => {
+          state.professional = professionals.find(p => p.id === btn.dataset.id);
+          renderProfessionals();
+        };
+      });
+    }
+
+    function renderTimes(){
+      timesEl.innerHTML = times.map(t => `<button type="button" class="time ${state.time===t?'selected':''}" data-time="${t}">${t}</button>`).join('');
+      timesEl.querySelectorAll('.time').forEach(btn => {
+        btn.onclick = () => {
+          state.time = btn.dataset.time;
+          renderTimes();
+        };
+      });
+    }
+
+    renderServices();
+    renderProfessionals();
+    renderTimes();
+
+    document.getElementById('demoForm').addEventListener('submit', e => {
+      e.preventDefault();
+      if(!state.service || !state.professional || !state.time){
+        alert('Escolha serviço, profissional e horário antes de continuar.');
+        return;
+      }
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const date = document.getElementById('date').value;
+      const note = document.getElementById('note').value.trim();
+
+      const msg = `Olá! Quero confirmar este agendamento:%0A%0ANome: ${encodeURIComponent(name)}%0AWhatsApp: ${encodeURIComponent(phone)}%0AServiço: ${encodeURIComponent(state.service.name)}%0AProfissional: ${encodeURIComponent(state.professional.name)}%0AData: ${encodeURIComponent(date)}%0AHorário: ${encodeURIComponent(state.time)}%0AObservação: ${encodeURIComponent(note || 'Sem observação')}`;
+      const wa = `https://wa.me/5555999990000?text=${msg}`;
+
+      resultEl.classList.remove('hidden');
+      resultEl.innerHTML = `
+        <strong>Demonstração confirmada</strong><br>
+        Serviço: ${state.service.name}<br>
+        Profissional: ${state.professional.name}<br>
+        Data: ${date}<br>
+        Horário: ${state.time}<br>
+        Cliente: ${name}<br><br>
+        <a class="primary" style="display:inline-flex;text-decoration:none" href="${wa}" target="_blank" rel="noopener">Continuar no WhatsApp</a>
+        <p class="mini-note" style="margin-top:14px">Troque o número 5555999990000 pelo WhatsApp real do seu cliente antes de vender.</p>
+      `;
+      resultEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+  </script>
 </body>
 </html>

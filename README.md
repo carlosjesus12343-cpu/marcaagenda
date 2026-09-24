@@ -36,3 +36,9 @@ Pode ser hospedado como site estático com HTTPS e domínio próprio. Para produ
 
 ## V2
 A página inicial agora é uma vitrine comercial do MarcaAgenda. O fluxo de agendamento de demonstração está em `demo.html`.
+
+
+## V3
+- Página inicial com exemplos genéricos (barbearia, clínica, estética, etc.).
+- Planos alterados para pagamento vitalício.
+- `demo.html` virou uma demonstração estática de experiência do cliente com Profissional 1, 2 e 3 e CTA para WhatsApp.
