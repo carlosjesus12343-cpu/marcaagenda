@@ -1,30 +1,94 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MarcaAgenda — Área profissional</title><link rel="stylesheet" href="./styles.css"><style>
-.plan-card{background:#f3eee8;border:1px solid var(--line);border-radius:18px;padding:20px;margin:18px 0}
-.plan-top{display:flex;justify-content:space-between;gap:16px;align-items:center}.plan-name{font-size:1.35rem;font-weight:800}.badge-ok{background:#e6f0e9;color:#315c46;padding:7px 10px;border-radius:999px;font-size:.74rem;font-weight:800}.badge-warn{background:#fff2de;color:#7a5420;padding:7px 10px;border-radius:999px;font-size:.74rem;font-weight:800}
-.entitlements{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}.ent{background:white;border:1px solid var(--line);border-radius:12px;padding:12px;font-size:.84rem}.ent b{display:block;margin-bottom:3px}.lock{opacity:.48}
-@media(max-width:700px){.entitlements{grid-template-columns:1fr}}
-</style></head>
-<body><header class="topbar"><a class="brand" href="./">MarcaAgenda</a><a class="quiet-link" href="./">Voltar ao site</a></header>
-<main class="admin-shell">
-<section id="loginCard" class="admin-card" style="max-width:480px;margin:40px auto"><p class="eyebrow">PAINEL DO NEGÓCIO</p><h1>Entrar</h1><p class="muted">Área para o dono e a equipe do negócio acompanharem agenda, clientes e plano. O cliente que agenda não precisa entrar aqui.</p><form id="loginForm" class="form-grid" style="grid-template-columns:1fr;margin-top:24px"><label class="field"><span>E-mail</span><input id="email" type="email" required></label><label class="field"><span>Senha</span><input id="password" type="password" required></label><button class="primary">Entrar</button></form><div id="loginError" class="alert hidden"></div></section>
-<section id="dashboard" class="hidden"><div style="display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:24px"><div><p class="eyebrow">PAINEL</p><h1 id="dashBusiness" style="margin:0">Agenda</h1></div><button id="logout" class="secondary">Sair</button></div>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MarcaAgenda — Painel do negócio</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+.wrap{width:min(1120px,calc(100% - 32px));margin:0 auto;padding:42px 0 70px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:8px;margin-bottom:18px}.tab{white-space:nowrap;border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:999px;font-weight:750}.tab.active{background:var(--accent);color:#fff}
+.list{display:grid;gap:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:14px;border:1px solid var(--line);border-radius:15px;padding:14px}.row small{color:var(--muted)}
+.badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:#eee8e0;font-size:.75rem;font-weight:800}.ok{background:#e8f2eb;color:#315c46}.locked{opacity:.5}
+.metric{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}.metric strong{display:block;font-size:2rem;margin-top:6px}
+.notice{background:#f3eee8;border-radius:14px;padding:14px;color:var(--muted);font-size:.9rem;line-height:1.55}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.color{width:100%;height:48px;border:1px solid var(--line);border-radius:12px;padding:4px;background:white}
+.day-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.day{border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
+.hidden{display:none!important}
+@media(max-width:780px){.grid2,.grid3{grid-template-columns:1fr}.row{align-items:flex-start;flex-direction:column}.day-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./">MarcaAgenda</a><a class="quiet-link" href="./">Página de vendas</a></header>
+<main class="wrap">
+<section id="loginCard" class="card" style="max-width:520px;margin:20px auto">
+<p class="eyebrow">PAINEL DO NEGÓCIO</p><h1>Entrar</h1><p class="muted">Área do proprietário e da equipe. Seus clientes não precisam entrar aqui para agendar.</p>
+<form id="loginForm" class="form-grid" style="grid-template-columns:1fr"><label class="field"><span>E-mail</span><input id="email" type="email" required></label><label class="field"><span>Senha</span><input id="password" type="password" required></label><button class="primary">Entrar</button></form><div id="loginError" class="alert hidden"></div>
+</section>
 
-<div id="planCard" class="plan-card">
-  <div class="plan-top"><div><span class="muted">Seu plano</span><div id="planName" class="plan-name">Carregando...</div></div><span id="licenseBadge" class="badge-warn">Verificando licença</span></div>
-  <div id="planPayment" class="muted" style="margin-top:6px"></div>
-  <div id="entitlements" class="entitlements"></div>
+<section id="dashboard" class="hidden">
+<div style="display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:22px"><div><p class="eyebrow">PAINEL DO NEGÓCIO</p><h1 id="businessTitle" style="margin:0">Minha agenda</h1></div><button id="logout" class="secondary">Sair</button></div>
+
+<div class="card">
+  <div style="display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap">
+    <div><span class="muted">Plano atual</span><h2 id="planName" style="margin:4px 0 0">—</h2></div><span id="planStatus" class="badge">Carregando</span>
+  </div>
+  <div id="planSummary" class="notice" style="margin-top:14px"></div>
 </div>
 
-<div class="admin-card" style="margin-bottom:16px">
-      <h2>Seu link de agendamento</h2>
-      <p class="muted">Envie este link aos seus clientes. Eles não precisam criar conta.</p>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <input id="publicBookingLink" readonly style="flex:1;min-width:220px">
-        <button id="copyBookingLink" class="secondary" type="button">Copiar link</button>
-        <a id="openBookingLink" class="primary" target="_blank" rel="noopener" style="text-decoration:none">Abrir página</a>
-      </div>
-    </div>
-    <div class="admin-grid"><div class="metric"><span class="muted">Hoje</span><strong id="todayCount">0</strong></div><div class="metric"><span class="muted">Próximos</span><strong id="futureCount">0</strong></div><div class="metric"><span class="muted">Clientes</span><strong id="clientCount">0</strong></div></div>
-<div class="admin-card" style="margin-top:16px"><h2>Próximos agendamentos</h2><div class="table-wrap"><table><thead><tr><th>Horário</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="appointments"></tbody></table></div></div>
+<div class="card">
+  <h2>Seu link de agendamento</h2><p class="muted">Envie este link aos clientes. Eles escolhem serviço, profissional e horário sem criar conta.</p>
+  <div class="actions"><input id="publicBookingLink" readonly style="flex:1;min-width:240px"><button id="copyLink" class="secondary">Copiar</button><a id="openLink" class="primary" target="_blank" style="text-decoration:none">Abrir</a></div>
+</div>
+
+<nav class="tabs">
+<button class="tab active" data-tab="overview">Visão geral</button>
+<button class="tab" data-tab="business">Meu negócio</button>
+<button class="tab" data-tab="services">Serviços</button>
+<button class="tab" data-tab="professionals">Profissionais</button>
+<button class="tab" data-tab="schedule">Horários</button>
+<button class="tab" data-tab="branding">Visual</button>
+</nav>
+
+<section id="tab-overview" class="tabpane">
+  <div class="grid3"><div class="metric"><span class="muted">Hoje</span><strong id="todayCount">0</strong></div><div class="metric"><span class="muted">Próximos</span><strong id="futureCount">0</strong></div><div class="metric"><span class="muted">Clientes</span><strong id="clientCount">0</strong></div></div>
+  <div id="advancedBox" class="card hidden" style="margin-top:16px"><h2>Painel avançado</h2><div class="grid3"><div class="metric"><span class="muted">Atendimentos 30 dias</span><strong id="monthCount">0</strong></div><div class="metric"><span class="muted">Serviços ativos</span><strong id="serviceCount">0</strong></div><div class="metric"><span class="muted">Profissionais ativos</span><strong id="proCount">0</strong></div></div></div>
+  <div class="card" style="margin-top:16px"><h2>Próximos agendamentos</h2><div class="table-wrap"><table><thead><tr><th>Horário</th><th>Cliente</th><th>Serviço</th><th>Profissional</th><th>Status</th></tr></thead><tbody id="appointments"></tbody></table></div></div>
 </section>
-</main><script src="./admin.js" defer></script></body></html>
+
+<section id="tab-business" class="tabpane hidden">
+<div class="card"><h2>Informações do negócio</h2><form id="businessForm" class="form-grid">
+<label class="field"><span>Nome</span><input id="bizName" required></label><label class="field"><span>WhatsApp</span><input id="bizWhatsapp"></label><label class="field"><span>E-mail de privacidade</span><input id="bizPrivacy" type="email"></label><label class="field"><span>Cidade</span><input id="bizCity"></label><label class="field"><span>Estado</span><input id="bizState" maxlength="2"></label><button class="primary">Salvar informações</button></form><div id="businessMsg" class="notice hidden"></div></div>
+</section>
+
+<section id="tab-services" class="tabpane hidden">
+<div class="card"><h2>Adicionar serviço</h2><form id="serviceForm" class="form-grid"><label class="field"><span>Nome do serviço</span><input id="serviceName" required></label><label class="field"><span>Duração (min)</span><input id="serviceDuration" type="number" min="15" step="5" value="60" required></label><label class="field"><span>Preço (R$)</span><input id="servicePrice" inputmode="decimal" placeholder="40,00"></label><button class="primary">Adicionar serviço</button></form></div>
+<div class="card"><h2>Seus serviços</h2><div id="servicesList" class="list"></div></div>
+</section>
+
+<section id="tab-professionals" class="tabpane hidden">
+<div class="card"><h2>Adicionar profissional</h2><p id="proLimitText" class="muted"></p><form id="professionalForm" class="form-grid"><label class="field"><span>Nome</span><input id="professionalName" required></label><label class="field"><span>Descrição</span><input id="professionalBio" placeholder="Ex.: especialista em cortes clássicos"></label><button class="primary">Adicionar profissional</button></form><div id="proError" class="alert hidden"></div></div>
+<div class="card"><h2>Equipe</h2><div id="professionalsList" class="list"></div></div>
+</section>
+
+<section id="tab-schedule" class="tabpane hidden">
+<div class="card"><h2>Horário de atendimento</h2><p class="muted">Escolha o profissional e defina os dias úteis. O agendamento público usa estes horários.</p>
+<label class="field"><span>Profissional</span><select id="scheduleProfessional"></select></label>
+<div class="day-grid" style="margin:16px 0">
+<label class="day"><input type="checkbox" class="weekday" value="1" checked> Seg</label><label class="day"><input type="checkbox" class="weekday" value="2" checked> Ter</label><label class="day"><input type="checkbox" class="weekday" value="3" checked> Qua</label><label class="day"><input type="checkbox" class="weekday" value="4" checked> Qui</label><label class="day"><input type="checkbox" class="weekday" value="5" checked> Sex</label>
+</div>
+<div class="grid2"><label class="field"><span>Início</span><input id="scheduleStart" type="time" value="08:00"></label><label class="field"><span>Fim</span><input id="scheduleEnd" type="time" value="18:00"></label></div>
+<button id="saveSchedule" class="primary" style="margin-top:12px">Salvar horários</button><div id="scheduleMsg" class="notice hidden" style="margin-top:12px"></div>
+</div>
+</section>
+
+<section id="tab-branding" class="tabpane hidden">
+<div id="brandingLocked" class="card hidden"><h2>Personalização visual</h2><p class="muted">Este recurso está disponível nos planos Profissional e Premium.</p></div>
+<div id="brandingCard" class="card hidden"><h2>Personalização visual</h2><form id="brandingForm" class="form-grid"><label class="field"><span>URL da logo</span><input id="logoUrl" type="url" placeholder="https://..."></label><label class="field"><span>Cor principal</span><input id="themePrimary" class="color" type="color"></label><label class="field"><span>Cor de fundo</span><input id="themeSurface" class="color" type="color"></label><button class="primary">Salvar visual</button></form><div id="brandingMsg" class="notice hidden"></div></div>
+</section>
+</section>
+</main>
+<script src="./admin.js" defer></script>
+</body></html>

@@ -95,3 +95,16 @@ Chave Pix aleatória configurada no fluxo de pagamento. O QR Code e o Pix Copia 
 - Painel do negócio mostra o link público para enviar aos clientes.
 - Cliente final não precisa ter conta.
 - O Pix continua com confirmação manual até existir integração com gateway/webhook.
+
+## V9 — entrega real dos recursos comprados
+O painel do negócio agora permite:
+- editar informações do negócio;
+- copiar e abrir o link público de agendamento;
+- cadastrar e ativar/desativar serviços;
+- cadastrar e ativar/desativar profissionais;
+- limite de profissionais aplicado no banco por plano;
+- configurar horários por profissional;
+- personalização visual apenas para Profissional/Premium;
+- painel avançado apenas quando o plano inclui esse recurso;
+- Premium usa link personalizado do negócio; domínio próprio foi removido da oferta até existir infraestrutura multi-domínio apropriada.
+- ativação de compra exige o mesmo e-mail usado no pedido.
