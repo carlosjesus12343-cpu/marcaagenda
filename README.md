@@ -108,3 +108,12 @@ O painel do negócio agora permite:
 - painel avançado apenas quando o plano inclui esse recurso;
 - Premium usa link personalizado do negócio; domínio próprio foi removido da oferta até existir infraestrutura multi-domínio apropriada.
 - ativação de compra exige o mesmo e-mail usado no pedido.
+
+## V10 — QR Code Pix local
+- QR Codes Pix dos três planos foram gerados e incluídos no próprio projeto.
+- Não depende mais de biblioteca externa/CDN para desenhar o QR.
+- Essencial: R$ 39,99.
+- Profissional: R$ 79,99.
+- Premium: R$ 99,99.
+- O pedido continua sendo criado no Supabase antes de exibir o Pix.
+- QR Code e Pix Copia e Cola usam a chave Pix configurada.

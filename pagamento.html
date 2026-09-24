@@ -16,7 +16,7 @@
 .notice{font-size:.84rem;color:var(--muted);line-height:1.6}
 @media(max-width:600px){.copy-row{flex-direction:column}}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
 </head>
 <body>
 <header class="topbar"><a class="brand" href="./">MarcaAgenda</a><a class="quiet-link" href="./">Voltar</a></header>
@@ -36,7 +36,7 @@
     <div id="pixArea" class="pixbox hidden">
       <h2 style="margin-top:0">Pague com Pix</h2>
       <p class="notice">Escaneie o QR Code ou copie o código Pix. O status ficará aguardando confirmação.</p>
-      <div class="qr-wrap"><div id="qrcode"></div></div>
+      <div class="qr-wrap"><img id="qrImage" alt="QR Code Pix" style="max-width:240px;width:100%;height:auto"></div>
       <div class="copy-row">
         <input id="pixCode" readonly>
         <button id="copyPix" type="button" class="secondary">Copiar código</button>

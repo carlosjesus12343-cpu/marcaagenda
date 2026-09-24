@@ -1,10 +1,11 @@
 const SB_URL='https://xdbnwojiwrjsoxmzuosu.supabase.co';
 const SB_KEY='sb_publishable_MS66GND3YbXJ-31KUwdDmA_DDviTf4F';
 
-// CONFIGURE ESTES 3 CAMPOS PARA GERAR UM PIX REAL.
-const PIX_KEY='7c92d620-194f-43f8-82ce-eb62ffd9a155';
-const MERCHANT_NAME='MARCAAGENDA';
-const MERCHANT_CITY='ITAQUI';
+const PIX_DATA={
+  essential:{name:'Essencial',price_cents:3999,payload:'00020101021126580014BR.GOV.BCB.PIX01367c92d620-194f-43f8-82ce-eb62ffd9a155520400005303986540539.995802BR5911MARCAAGENDA6006ITAQUI62070503***63044B2C',qr:'./pix-essential.png'},
+  professional:{name:'Profissional',price_cents:7999,payload:'00020101021126580014BR.GOV.BCB.PIX01367c92d620-194f-43f8-82ce-eb62ffd9a155520400005303986540579.995802BR5911MARCAAGENDA6006ITAQUI62070503***63044AC1',qr:'./pix-professional.png'},
+  premium:{name:'Premium',price_cents:9999,payload:'00020101021126580014BR.GOV.BCB.PIX01367c92d620-194f-43f8-82ce-eb62ffd9a155520400005303986540599.995802BR5911MARCAAGENDA6006ITAQUI62070503***6304C010',qr:'./pix-premium.png'}
+};
 
 const $=s=>document.querySelector(s);
 const qs=new URLSearchParams(location.search);
@@ -19,58 +20,23 @@ async function rpc(fn,body={}){
     headers:{apikey:SB_KEY,Authorization:`Bearer ${SB_KEY}`,'Content-Type':'application/json'},
     body:JSON.stringify(body)
   });
-  if(!r.ok) throw new Error(await r.text());
-  return await r.json();
+  const t=await r.text();
+  if(!r.ok) throw new Error(t||'Erro ao criar pedido');
+  return t?JSON.parse(t):null;
 }
 
-function crc16(str){
-  let crc=0xFFFF;
-  for(let c=0;c<str.length;c++){
-    crc ^= str.charCodeAt(c)<<8;
-    for(let i=0;i<8;i++) crc=(crc&0x8000)?((crc<<1)^0x1021):(crc<<1);
-    crc &= 0xFFFF;
-  }
-  return crc.toString(16).toUpperCase().padStart(4,'0');
-}
-const field=(id,val)=>id+String(val.length).padStart(2,'0')+val;
-function clean(s,max){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9 $%*+\-./:]/g,'').toUpperCase().slice(0,max);}
-function makePixPayload(key,name,city,amount,txid){
-  const gui=field('00','BR.GOV.BCB.PIX');
-  const keyField=field('01',key);
-  const merchantAccount=field('26',gui+keyField);
-  const addData=field('62',field('05',txid.slice(0,25)));
-  const base=
-    field('00','01')+
-    field('01','12')+
-    merchantAccount+
-    field('52','0000')+
-    field('53','986')+
-    field('54',amount.toFixed(2))+
-    field('58','BR')+
-    field('59',clean(name,25))+
-    field('60',clean(city,15))+
-    addData+
-    '6304';
-  return base+crc16(base);
-}
-
-async function load(){
-  try{
-    const plans=await rpc('get_sale_plans');
-    currentPlan=plans.find(p=>p.id===wantedPlan)||plans[0];
-    $('#planName').textContent=currentPlan.name;
-    $('#price').textContent=money(currentPlan.price_cents);
-  }catch(e){showError('Não foi possível carregar os planos.');}
-}
 function showError(msg){const e=$('#errorBox');e.textContent=msg;e.classList.remove('hidden')}
+
+function load(){
+  currentPlan=PIX_DATA[wantedPlan]||PIX_DATA.essential;
+  currentPlan.id=wantedPlan in PIX_DATA?wantedPlan:'essential';
+  $('#planName').textContent=currentPlan.name;
+  $('#price').textContent=money(currentPlan.price_cents);
+}
 
 $('#buyerForm').addEventListener('submit',async e=>{
   e.preventDefault();
   $('#errorBox').classList.add('hidden');
-  if(PIX_KEY==='SUA_CHAVE_PIX_AQUI'){
-    showError('A estrutura está pronta, mas falta configurar sua chave Pix para gerar uma cobrança real.');
-    return;
-  }
   try{
     const rows=await rpc('create_pix_order_v2',{
       p_plan_id:currentPlan.id,
@@ -79,19 +45,38 @@ $('#buyerForm').addEventListener('submit',async e=>{
       p_buyer_email:$('#buyerEmail').value.trim()
     });
     const order=rows[0];
-    const txid=order.external_reference.slice(0,25);
-    const payload=makePixPayload(PIX_KEY,MERCHANT_NAME,MERCHANT_CITY,order.amount_cents/100,txid);
-    $('#pixCode').value=payload;
-    $('#orderRef').textContent=`Referência da cobrança: ${order.external_reference}`;
+
+    $('#pixCode').value=currentPlan.payload;
+    $('#qrImage').src=currentPlan.qr;
+    $('#qrImage').alt=`QR Code Pix ${currentPlan.name} - ${money(currentPlan.price_cents)}`;
+    $('#orderRef').textContent=`Referência da compra: ${order.external_reference}`;
+
     const activation=`./ativar.html?order=${encodeURIComponent(order.order_id)}&ref=${encodeURIComponent(order.external_reference)}`;
     $('#activationLink').href=activation;
     $('#activationLink').classList.remove('hidden');
-    localStorage.setItem('ma_last_order',JSON.stringify({order_id:order.order_id,external_reference:order.external_reference,plan_id:order.plan_id}));
+
+    localStorage.setItem('ma_last_order',JSON.stringify({
+      order_id:order.order_id,
+      external_reference:order.external_reference,
+      plan_id:order.plan_id
+    }));
+
     $('#pixArea').classList.remove('hidden');
-    $('#qrcode').innerHTML='';
-    new QRCode($('#qrcode'),{text:payload,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});
     $('#pixArea').scrollIntoView({behavior:'smooth'});
-  }catch(err){showError('Não foi possível gerar a cobrança Pix. Atualize a página e tente novamente. Se continuar, fale com o suporte.');}
+  }catch(err){
+    console.error(err);
+    showError('Não foi possível gerar a cobrança Pix. Atualize a página e tente novamente.');
+  }
 });
-$('#copyPix').onclick=async()=>{await navigator.clipboard.writeText($('#pixCode').value);$('#copyPix').textContent='Copiado!';setTimeout(()=>$('#copyPix').textContent='Copiar código',1500)};
+
+$('#copyPix').onclick=async()=>{
+  try{
+    await navigator.clipboard.writeText($('#pixCode').value);
+    $('#copyPix').textContent='Copiado!';
+    setTimeout(()=>$('#copyPix').textContent='Copiar código',1500);
+  }catch{
+    $('#pixCode').select();
+    document.execCommand('copy');
+  }
+};
 load();
