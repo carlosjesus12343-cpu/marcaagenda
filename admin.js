@@ -7,7 +7,7 @@ const brl=c=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).fo
 function renderEntitlements(plan, license){
   const active=license?.status==='active' && license?.lifetime_access===true;
   $('#planName').textContent=plan?.name||'Sem plano';
-  $('#licenseBadge').textContent=active?'LICENÇA VITALÍCIA ATIVA':'LICENÇA PENDENTE';
+  $('#licenseBadge').textContent=active?'PLANO ATIVO':'LICENÇA PENDENTE';
   $('#licenseBadge').className=active?'badge-ok':'badge-warn';
   $('#planPayment').textContent=active?`Pagamento único confirmado${license.amount_paid_cents!=null?' · '+brl(license.amount_paid_cents):''}`:'Aguardando ativação após pagamento único.';
   const items=[
@@ -16,7 +16,7 @@ function renderEntitlements(plan, license){
     ['Domínio próprio', plan?.custom_domain?'Liberado':'Não incluído', !!plan?.custom_domain],
     ['Painel avançado', plan?.advanced_dashboard?'Liberado':'Não incluído', !!plan?.advanced_dashboard],
     ['Suporte prioritário', plan?.priority_support?'Liberado':'Não incluído', !!plan?.priority_support],
-    ['Acesso', active?'Vitalício':'Pendente', active]
+    ['Acesso', active?'Liberado':'Pendente', active]
   ];
   $('#entitlements').innerHTML=items.map(([a,b,on])=>`<div class="ent ${on?'':'lock'}"><b>${a}</b>${b}</div>`).join('');
 }

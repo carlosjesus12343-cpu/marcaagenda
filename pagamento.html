@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MarcaAgenda — Pagamento</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+.pay-shell{width:min(760px,calc(100% - 32px));margin:0 auto;padding:64px 0}
+.pay-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px}
+.price-big{font-size:2.4rem;font-weight:850;letter-spacing:-.04em;margin:6px 0 18px}
+.pixbox{background:#f3eee8;border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:20px}
+.qr-wrap{display:grid;place-items:center;background:white;border-radius:16px;padding:18px;margin:16px 0}
+#qrcode img,#qrcode canvas{max-width:240px!important;width:100%!important;height:auto!important}
+.copy-row{display:flex;gap:8px}.copy-row input{flex:1;min-width:0}
+.notice{font-size:.84rem;color:var(--muted);line-height:1.6}
+@media(max-width:600px){.copy-row{flex-direction:column}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="./">MarcaAgenda</a><a class="quiet-link" href="./">Voltar</a></header>
+<main class="pay-shell">
+  <section class="pay-card">
+    <p class="eyebrow">PAGAMENTO ÚNICO</p>
+    <h1 id="planName">Carregando plano...</h1>
+    <div id="price" class="price-big"></div>
+    <p class="muted">Sem mensalidade do MarcaAgenda. Após o pagamento ser confirmado, o plano é liberado.</p>
+
+    <form id="buyerForm" class="form-grid" style="grid-template-columns:1fr;margin-top:24px">
+      <label class="field"><span>Seu nome</span><input id="buyerName" required maxlength="100"></label>
+      <label class="field"><span>Seu WhatsApp</span><input id="buyerPhone" required maxlength="30" placeholder="(55) 99999-9999"></label>
+      <button class="primary" type="submit">Gerar cobrança Pix</button>
+    </form>
+
+    <div id="pixArea" class="pixbox hidden">
+      <h2 style="margin-top:0">Pague com Pix</h2>
+      <p class="notice">Escaneie o QR Code ou copie o código Pix. O status ficará aguardando confirmação.</p>
+      <div class="qr-wrap"><div id="qrcode"></div></div>
+      <div class="copy-row">
+        <input id="pixCode" readonly>
+        <button id="copyPix" type="button" class="secondary">Copiar código</button>
+      </div>
+      <p id="orderRef" class="notice"></p>
+      <p class="notice"><strong>Importante:</strong> para gerar um Pix real, configure sua chave Pix, nome do recebedor e cidade no arquivo <code>pagamento.js</code>. A confirmação automática do pagamento exige integração com um provedor/API.</p>
+    </div>
+    <div id="errorBox" class="alert hidden"></div>
+  </section>
+</main>
+<script src="./pagamento.js" defer></script>
+</body></html>

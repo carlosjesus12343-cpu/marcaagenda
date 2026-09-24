@@ -56,3 +56,20 @@ O Supabase agora possui:
 - licença demo do `studio-aurora` está ativa como Premium vitalício.
 
 Observação: a cobrança ainda precisa de um meio de pagamento externo. Após a confirmação, a licença pode ser ativada no banco; o modelo já está pronto para registrar provedor, ID do pagamento, valor pago e data.
+
+## V5 — pagamento único + Pix
+- Valores corrigidos:
+  - Essencial: R$ 39,99
+  - Profissional: R$ 79,99
+  - Premium: R$ 99,99
+- Sem mensalidade do MarcaAgenda.
+- Criado `pagamento.html` e `pagamento.js`.
+- Banco separado logicamente no schema `payments` dentro do mesmo Supabase.
+- Cobranças Pix ficam separadas da agenda.
+- O QR Code e o Pix Copia e Cola são gerados no navegador.
+- Para ativar Pix real, configure `PIX_KEY`, `MERCHANT_NAME` e `MERCHANT_CITY` em `pagamento.js`.
+- Confirmação automática exige integração com um provedor de pagamento/webhook.
+
+
+## V6
+Chave Pix aleatória configurada no fluxo de pagamento. O QR Code e o Pix Copia e Cola agora usam a chave configurada em `pagamento.js`.
