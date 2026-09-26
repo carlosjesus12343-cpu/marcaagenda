@@ -117,3 +117,18 @@ O painel do negócio agora permite:
 - Premium: R$ 99,99.
 - O pedido continua sendo criado no Supabase antes de exibir o Pix.
 - QR Code e Pix Copia e Cola usam a chave Pix configurada.
+
+## V11 — QR incorporado + acesso admin corrigido
+- QR Codes Pix agora estão embutidos no próprio `pagamento.js` como Data URI.
+- Não dependem de CDN, arquivo PNG separado ou caminho relativo do GitHub Pages.
+- A conta principal de administrador criada foi confirmada no Supabase para permitir login.
+- Fluxo de gestão continua exigindo autenticação e o código de bootstrap na primeira ativação.
+
+## V12 — fluxo de pagamento e diagnóstico do QR
+- O QR é exibido após o banco devolver um pedido com referência, plano e valor corretos.
+- Se a imagem incorporada não carregar, a página usa o PNG local do mesmo plano.
+- Erros no cadastro do pedido aparecem na página com a mensagem retornada pelo banco; não se mostra um Pix sem pedido associado.
+- A chamada ao banco tem limite de 15 segundos e o botão é reativado para tentar novamente.
+- A versão do script na página mudou para evitar que o navegador continue usando o JavaScript antigo em cache.
+- Para publicar, substitua todos os arquivos na raiz do site, inclusive `pagamento.html`, `pagamento.js` e os três `pix-*.png`.
+- A confirmação do Pix continua manual no painel de gestão; o QR sozinho não confirma o pagamento.

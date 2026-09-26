@@ -11,7 +11,7 @@
 .price-big{font-size:2.4rem;font-weight:850;letter-spacing:-.04em;margin:6px 0 18px}
 .pixbox{background:#f3eee8;border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:20px}
 .qr-wrap{display:grid;place-items:center;background:white;border-radius:16px;padding:18px;margin:16px 0}
-#qrcode img,#qrcode canvas{max-width:240px!important;width:100%!important;height:auto!important}
+#qrImage{max-width:240px;width:100%;height:auto;image-rendering:auto}
 .copy-row{display:flex;gap:8px}.copy-row input{flex:1;min-width:0}
 .notice{font-size:.84rem;color:var(--muted);line-height:1.6}
 @media(max-width:600px){.copy-row{flex-direction:column}}
@@ -35,17 +35,17 @@
 
     <div id="pixArea" class="pixbox hidden">
       <h2 style="margin-top:0">Pague com Pix</h2>
-      <p class="notice">Escaneie o QR Code ou copie o código Pix. O status ficará aguardando confirmação.</p>
-      <div class="qr-wrap"><img id="qrImage" alt="QR Code Pix" style="max-width:240px;width:100%;height:auto"></div>
+      <p class="notice">Escaneie o QR Code ou copie o código Pix. O QR está incorporado na própria página para evitar falhas de carregamento.</p>
+      <div class="qr-wrap"><img id="qrImage" alt="QR Code Pix" width="240" height="240"></div>
       <div class="copy-row">
         <input id="pixCode" readonly>
         <button id="copyPix" type="button" class="secondary">Copiar código</button>
       </div>
-      <p id="orderRef" class="notice"></p><a id="activationLink" class="primary hidden" style="display:inline-flex;text-decoration:none;margin-top:10px" href="#">Já paguei — acompanhar ativação</a>
-      <p class="notice"><strong>Importante:</strong> para gerar um Pix real, configure sua chave Pix, nome do recebedor e cidade no arquivo <code>pagamento.js</code>. A confirmação automática do pagamento exige integração com um provedor/API.</p>
+      <p id="orderRef" class="notice"></p><a id="activationLink" class="primary hidden" style="text-decoration:none;margin-top:10px" href="#">Já paguei — acompanhar ativação</a>
+      <p class="notice">O pagamento é conferido manualmente antes da liberação do plano. Guarde a referência da compra.</p>
     </div>
     <div id="errorBox" class="alert hidden"></div>
   </section>
 </main>
-<script src="./pagamento.js" defer></script>
+<script src="./pagamento.js?v=12" defer></script>
 </body></html>
