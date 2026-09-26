@@ -1,0 +1,18 @@
+MARCA AGENDA - ATUALIZAÇÃO
+
+1. Abra o repositório:
+   carlosjesus12343-cpu/marcaagenda
+
+2. Substitua o arquivo index.html pelo index.html desta pasta.
+
+3. Confirme o commit no branch main.
+
+O arquivo já contém:
+- Título público: Marca Agenda
+- Autor público: Marca Agenda
+- Open Graph para compartilhamento
+- Twitter Card
+- Descrição pública sem Carlos Jesus
+
+Observação:
+O endereço carlosjesus12343-cpu.github.io continuará aparecendo enquanto o domínio personalizado não for configurado.
